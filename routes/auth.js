@@ -21,7 +21,7 @@ router.post('/new', [
 
 router.post('/', [
     check('email').not().isEmpty().withMessage('El email es obligatorio').isEmail().withMessage('El email es inválido'),
-    check('password').not().isEmpty().withMessage('El password es obligatorio').isLength({ 'min': 6 }).withMessage('El password debe contener por lo menos 6 caracteres'),
+    check('password').not().isEmpty().withMessage('El password es obligatorio'),
     validarCampos
 ], login);
 

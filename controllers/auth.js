@@ -90,11 +90,6 @@ const login = async(req, res = response) => {
             msg: 'Hable con el administrador'
         });
     }
-
-    res.json({
-        ok: true,
-        msg: 'LOGIN!!!!',
-    });
 };
 
 const renewToken = async(req, res = response) => {
