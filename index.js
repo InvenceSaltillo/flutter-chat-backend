@@ -20,6 +20,12 @@ require('./sockets/socket');
 const publicPath = path.resolve(__dirname, 'public');
 app.use(express.static(publicPath));
 
+var cors = require('cors');
+
+
+app.options('*', cors());
+app.use(cors());
+
 // Mis rutas
 app.use('/api/login', require('./routes/auth'));
 app.use('/api/usuarios', require('./routes/usuarios'));

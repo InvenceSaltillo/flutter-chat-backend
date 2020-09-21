@@ -5,10 +5,11 @@ const { usuarioConectado, usuarioDesconectado, grabarMensaje } = require('../con
 
 // Mensajes de Sockets
 io.on('connection', client => {
-    console.log('Cliente conectado');
 
-    const [valido, uid] = comprobarJWT(client.handshake.headers['x-token']);
-    console.log(valido, uid);
+    // console.log(client);
+
+    const [valido, uid] = comprobarJWT(client.handshake.query['x-token'] || client.handshake.headers['x-token']);
+    console.log('Valido', valido, uid);
 
     // Verificar autenticacion
     if (!valido) return client.disconnect();
@@ -20,17 +21,28 @@ io.on('connection', client => {
     // Sala global
     client.join(uid);
 
+    client.on('usuario-conectado', async(payload) => {
+
+        console.log('Usuario conectado', payload);
+
+        io.emit('usuario-conectado', payload);
+    });
+
     // Escuchar del cliente el mensaje-personal
     client.on('mensaje-personal', async(payload) => {
-        // TODO: Grabar mensaje
+
+        console.log(payload);
+
         await grabarMensaje(payload);
 
         io.to(payload.para).emit('mensaje-personal', payload);
     });
 
     client.on('disconnect', () => {
-        console.log('Cliente desconectado');
+        console.log('Cliente desconectado', uid);
         usuarioDesconectado(uid);
+
+        io.emit('usuario-desconectado', uid);
     });
 
     // client.on('mensaje', ( payload ) => {
