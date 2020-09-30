@@ -1,11 +1,13 @@
 const Usuario = require('../models/usuario');
 const Mensaje = require('../models/mensaje');
 
-const usuarioConectado = async(uid = '') => {
+const usuarioConectado = async(uid = '', fcmToken = '') => {
 
     const usuario = await Usuario.findById(uid);
 
     usuario.online = true;
+    usuario.fcmToken = fcmToken;
+    console.log('Usuario conectado', usuario);
 
     await usuario.save();
 

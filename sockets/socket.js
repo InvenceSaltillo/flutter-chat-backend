@@ -9,29 +9,25 @@ io.on('connection', client => {
     // console.log(client);
 
     const [valido, uid] = comprobarJWT(client.handshake.query['x-token'] || client.handshake.headers['x-token']);
-    console.log('Valido', valido, uid);
 
     // Verificar autenticacion
     if (!valido) return client.disconnect();
 
+    const fcmToken = client.handshake.query['fcm-token'] || client.handshake.headers['fcm-token'];
+
     // Cliente autenticado
-    usuarioConectado(uid);
+    usuarioConectado(uid, fcmToken);
 
     // Ingresar al usuario a una sala especifica
     // Sala global
     client.join(uid);
 
     client.on('usuario-conectado', async(payload) => {
-
-        console.log('Usuario conectado', payload);
-
         io.emit('usuario-conectado', payload);
     });
 
     // Escuchar del cliente el mensaje-personal
     client.on('mensaje-personal', async(payload) => {
-
-        console.log(payload);
 
         await grabarMensaje(payload);
 
@@ -39,10 +35,10 @@ io.on('connection', client => {
     });
 
     client.on('disconnect', () => {
-        console.log('Cliente desconectado', uid);
         usuarioDesconectado(uid);
 
         io.emit('usuario-desconectado', uid);
+        console.log('Cliente desconectado!!');
     });
 
     // client.on('mensaje', ( payload ) => {
