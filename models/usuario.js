@@ -14,10 +14,6 @@ const UsuarioSchema = Schema({
         unique: true
     },
 
-    fcmToken: {
-        type: String
-    },
-
     password: {
         type: String,
         required: true,

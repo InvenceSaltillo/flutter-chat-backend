@@ -13,8 +13,6 @@ io.on('connection', client => {
     // Verificar autenticacion
     if (!valido) return client.disconnect();
 
-    const fcmToken = client.handshake.query['fcm-token'] || client.handshake.headers['fcm-token'];
-
     // Cliente autenticado
     usuarioConectado(uid, fcmToken);
 
@@ -40,13 +38,6 @@ io.on('connection', client => {
         io.emit('usuario-desconectado', uid);
         console.log('Cliente desconectado!!');
     });
-
-    // client.on('mensaje', ( payload ) => {
-    //     console.log('Mensaje', payload);
-
-    //     io.emit( 'mensaje', { admin: 'Nuevo mensaje' } );
-
-    // });
 
 
 });
